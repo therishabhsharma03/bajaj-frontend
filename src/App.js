@@ -78,7 +78,7 @@ function App() {
   };
 
   return (
-    <div className="App">
+<div className="App">
       <h1>JSON Input Form</h1>
       <form onSubmit={handleSubmit}>
         <textarea
@@ -86,7 +86,10 @@ function App() {
           cols="50"
           value={jsonInput}
           onChange={(e) => setJsonInput(e.target.value)}
-          placeholder='Enter Valid JSON Format only'
+          placeholder={`{
+  "data": ["A", "C", "Z", "c", "i"]
+}`}
+          style={{ whiteSpace: "pre-wrap" }}
         />
         <br />
         <button type="submit">Submit</button>
