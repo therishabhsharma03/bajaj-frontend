@@ -86,7 +86,7 @@ function App() {
           cols="50"
           value={jsonInput}
           onChange={(e) => setJsonInput(e.target.value)}
-          placeholder='{"data": ["A", "1", "b"]}'
+          placeholder='Enter Valid JSON Format only'
         />
         <br />
         <button type="submit">Submit</button>
