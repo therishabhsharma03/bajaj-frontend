@@ -62,7 +62,8 @@ function App() {
 
   return (
     <div className="App">
-      <h1>JSON Input Form</h1>
+      <h1>JSON Input Form </h1>
+    <p>My backend is deployed on render free instance so it may take time to start </p>
       <form onSubmit={handleSubmit}>
         <textarea
           rows="4"
