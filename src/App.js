@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import './App.css'; // Import the CSS file
 
 function App() {
   const [jsonInput, setJsonInput] = useState("");
   const [error, setError] = useState("");
   const [response, setResponse] = useState({});
+  const [loading, setLoading] = useState(false); // Loading state
 
   useEffect(() => {
     document.title = "21BCE11053";
@@ -14,6 +16,7 @@ function App() {
     e.preventDefault();
     setError("");
     setResponse({});
+    setLoading(true); // Set loading to true
 
     try {
       console.log("Submitting:", jsonInput);
@@ -31,6 +34,8 @@ function App() {
     } catch (err) {
       console.error("Error:", err);
       setError("Invalid JSON input or server error");
+    } finally {
+      setLoading(false); // Set loading to false
     }
   };
 
@@ -48,9 +53,10 @@ function App() {
         <br />
         <button type="submit">Submit</button>
       </form>
-      {error && <div style={{ color: "red" }}>{error}</div>}
+      {loading && <div className="loading">Backend is loading...</div>}
+      {error && <div className="error">{error}</div>}
       {response && Object.keys(response).length > 0 && (
-        <div>
+        <div className="response-container">
           <h3>Response</h3>
           <pre>{JSON.stringify(response, null, 2)}</pre>
         </div>
