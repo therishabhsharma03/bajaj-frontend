@@ -1,12 +1,22 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import './App.css'; // Import the CSS file
+// Function to validate JSON format
+const isValidJson = (str) => {
+  try {
+    JSON.parse(str);
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
 
 function App() {
   const [jsonInput, setJsonInput] = useState("");
   const [error, setError] = useState("");
   const [response, setResponse] = useState({});
-  const [loading, setLoading] = useState(false); // Loading state
+  const [filters, setFilters] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     document.title = "21BCE11053";
@@ -16,10 +26,15 @@ function App() {
     e.preventDefault();
     setError("");
     setResponse({});
-    setLoading(true); // Set loading to true
+    setLoading(true);
 
     try {
       console.log("Submitting:", jsonInput);
+
+      // Validate JSON format
+      if (!isValidJson(jsonInput)) {
+        throw new Error("Invalid JSON format");
+      }
 
       const parsedInput = JSON.parse(jsonInput);
       console.log("Parsed Input:", parsedInput);
@@ -35,8 +50,31 @@ function App() {
       console.error("Error:", err);
       setError("Invalid JSON input or server error");
     } finally {
-      setLoading(false); // Set loading to false
+      setLoading(false);
     }
+  };
+
+  const handleFilterChange = (e) => {
+    const value = Array.from(e.target.selectedOptions, (option) => option.value);
+    setFilters(value);
+  };
+
+  const renderFilteredResponse = () => {
+    return (
+      <div>
+        {filters.includes("Numbers") && (
+          <div>Numbers: {response.numbers?.join(", ")}</div>
+        )}
+        {filters.includes("Alphabets") && (
+          <div>Alphabets: {response.alphabets?.join(", ")}</div>
+        )}
+        {filters.includes("Highest lowercase alphabet") && (
+          <div>
+            Highest lowercase alphabet: {response.highest_lowercase_alphabet?.join(", ")}
+          </div>
+        )}
+      </div>
+    );
   };
 
   return (
@@ -48,17 +86,30 @@ function App() {
           cols="50"
           value={jsonInput}
           onChange={(e) => setJsonInput(e.target.value)}
-          placeholder='{"data": ["A","1","b"]}'
+          placeholder='{"data": ["A", "1", "b"]}'
         />
         <br />
         <button type="submit">Submit</button>
       </form>
-      {loading && <div className="loading">Backend is loading...</div>}
+      {loading && (
+        <div className="loading">
+          <div className="loader"></div>
+          Backend is loading... It may take up to a minute to start the backend service.
+        </div>
+      )}
       {error && <div className="error">{error}</div>}
       {response && Object.keys(response).length > 0 && (
         <div className="response-container">
           <h3>Response</h3>
           <pre>{JSON.stringify(response, null, 2)}</pre>
+          <label>Multi Filter</label>
+          <select multiple={true} onChange={handleFilterChange}>
+            <option value="Numbers">Numbers</option>
+            <option value="Alphabets">Alphabets</option>
+            <option value="Highest lowercase alphabet">Highest lowercase alphabet</option>
+          </select>
+          <h3>Filtered Response</h3>
+          {renderFilteredResponse()}
         </div>
       )}
     </div>
