@@ -1,33 +1,32 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import './App.css'; // Import the CSS file
 
 function App() {
   const [jsonInput, setJsonInput] = useState("");
   const [error, setError] = useState("");
   const [response, setResponse] = useState({});
-  const [filters, setFilters] = useState([]);
 
   useEffect(() => {
     document.title = "21BCE11053";
   }, []);
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setResponse({});
-  
+
     try {
       console.log("Submitting:", jsonInput);
-  
+
       const parsedInput = JSON.parse(jsonInput);
       console.log("Parsed Input:", parsedInput);
-  
+
       if (!parsedInput.data) throw new Error("Invalid JSON structure");
-  
+
       const res = await axios.post("https://bajaj-backend-f195.onrender.com/bfhl", parsedInput);
+
       console.log("Response:", res.data);
-  
+
       setResponse(res.data);
     } catch (err) {
       console.error("Error:", err);
@@ -35,36 +34,9 @@ function App() {
     }
   };
 
-  const handleFilterChange = (e) => {
-    const value = Array.from(
-      e.target.selectedOptions,
-      (option) => option.value
-    );
-    setFilters(value);
-  };
-
-  const renderFilteredResponse = () => {
-    return (
-      <div className="filtered-response">
-        {filters.includes("Numbers") && (
-          <div>Numbers: {response.numbers?.join(",")}</div>
-        )}
-        {filters.includes("Alphabets") && (
-          <div>Alphabets: {response.alphabets?.join(",")}</div>
-        )}
-        {filters.includes("Highest lowercase alphabet") && (
-          <div>
-            Highest lowercase alphabet: {response.highest_lowercase_alphabet?.join(",")}
-          </div>
-        )}
-      </div>
-    );
-  };
-
   return (
     <div className="App">
       <h1>JSON Input Form</h1>
-      <p>My backend is deployed on Render free instance so it will take some time to Initiate . You are seeing react frontnd which is deployed on vercel</p>
       <form onSubmit={handleSubmit}>
         <textarea
           rows="4"
@@ -76,17 +48,11 @@ function App() {
         <br />
         <button type="submit">Submit</button>
       </form>
-      {error && <div className="error">{error}</div>}
+      {error && <div style={{ color: "red" }}>{error}</div>}
       {response && Object.keys(response).length > 0 && (
-        <div className="response-container">
-          <label>Multi Filter</label>
-          <select multiple={true} onChange={handleFilterChange}>
-            <option value="Numbers">Numbers</option>
-            <option value="Alphabets">Alphabets</option>
-            <option value="Highest lowercase alphabet">Highest lowercase alphabet</option>
-          </select>
-          <h3>Filtered Response</h3>
-          {renderFilteredResponse()}
+        <div>
+          <h3>Response</h3>
+          <pre>{JSON.stringify(response, null, 2)}</pre>
         </div>
       )}
     </div>
