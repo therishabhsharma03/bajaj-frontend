@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import './App.css'; // Import the CSS file
 
 function App() {
   const [jsonInput, setJsonInput] = useState("");
@@ -44,7 +45,7 @@ function App() {
 
   const renderFilteredResponse = () => {
     return (
-      <div>
+      <div className="filtered-response">
         {filters.includes("Numbers") && (
           <div>Numbers: {response.numbers?.join(",")}</div>
         )}
@@ -62,8 +63,8 @@ function App() {
 
   return (
     <div className="App">
-      <h1>JSON Input Form </h1>
-    <p>My backend is deployed on render free instance so it may take time to start </p>
+      <h1>JSON Input Form</h1>
+      <p>My backend is deployed on Render free instance so it will take some time to Initiate . You are seeing react frontnd which is deployed on vercel</p>
       <form onSubmit={handleSubmit}>
         <textarea
           rows="4"
@@ -75,9 +76,9 @@ function App() {
         <br />
         <button type="submit">Submit</button>
       </form>
-      {error && <div style={{ color: "red" }}>{error}</div>}
+      {error && <div className="error">{error}</div>}
       {response && Object.keys(response).length > 0 && (
-        <div>
+        <div className="response-container">
           <label>Multi Filter</label>
           <select multiple={true} onChange={handleFilterChange}>
             <option value="Numbers">Numbers</option>
