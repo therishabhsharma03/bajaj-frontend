@@ -24,7 +24,7 @@ function App() {
   
       if (!parsedInput.data) throw new Error("Invalid JSON structure");
   
-      const res = await axios.post("http://localhost:3005/bfhl", parsedInput);
+      const res = await axios.post("https://bajaj-backend-f195.onrender.com/bfhl", parsedInput);
       console.log("Response:", res.data);
   
       setResponse(res.data);
